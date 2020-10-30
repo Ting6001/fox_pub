@@ -1,0 +1,3 @@
+2020-10-29 15:28:57 | INFO     | 0020 | save2json_2020-10-29_15-28-57.log
+2020-10-29 15:28:57 | ERROR    | 0100 | File "save2json.py", at line 42, in Function <module>, Error Msg: [ZeroDivisionError] division by zero
+2020-10-29 15:28:57 | WARNING  | 0104 | Time：0:00:00.017002

@@ -1,0 +1,13 @@
+{
+"host" : "35.223.193.119", 
+"port" : "5432", 
+"user" : "foxconn",
+"password" : "foxconn",
+"database" : "dbfoxconn",
+"ori_json_folder":"D:\\_MiaFoxconn\\PHM\\log\\test\\ori_json\\",
+"saved_json_folder":"D:\\_MiaFoxconn\\PHM\\log\\test\\saved_json\\",
+"log_folder":"D:\\_MiaFoxconn\\PHM\\log\\test\\logs\\",
+"get_pre_second" : 15,
+"update_second" : 10,
+"count_limit" : 1
+}

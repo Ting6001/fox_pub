@@ -1,0 +1,40 @@
+[
+    {
+        "machine_info": {
+            "device_no": "EQ000001",
+            "station_no": "T13W10001",
+            "robot_no": "robot00008",
+            "WIP_no": "0",
+            "recipe_no": "1"
+        },
+        "machine_para": {
+            "report_time": "2020-06-05_10:10:22",
+            "Motor_Torque01": 0.15,
+            "Motor_Torque02": 0.25,
+            "Motor_Torque03": 0.35,
+            "Motor_Torque04": 0.45,
+            "Motor_Torque05": 0.55,
+            "Motor_Torque06": 0.65,
+            "Motor_Travel01": 10.0,
+            "Motor_Travel02": 20.0,
+            "Motor_Travel03": 30.0,
+            "Motor_Travel04": 40.0,
+            "Motor_Travel05": 50.0,
+            "Motor_Travel06": 60.0,
+            "robot_i": 10.0,
+            "robot_v": 220.0,
+            "robot_total_w": 200.0,
+            "clamp_force": 120.0,
+            "vacuum_suction": 50.0,
+            "motion_cycle": 10,
+            "flowmeter01": 10.0,
+            "wafer_result": "Y",
+            "wafer_center_x": 500.0,
+            "wafer_center_y": 500.0,
+            "wafer_center_z": null,
+            "wafer_radius": 150.0,
+            "deviation": 2.19,
+            "snr": 270.67
+        }
+    }
+]
