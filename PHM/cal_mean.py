@@ -10,6 +10,10 @@ import shutil
 import spc_8rules
 # from tqdm import tqdm
 from logger import create_logger
+# ===================================================================================
+#  計算平均值寫入machine_mean
+# ===================================================================================
+
 
 workfilename = os.path.splitext(os.path.basename(__file__))[0]
 logname = workfilename + '_' + \

@@ -11,7 +11,13 @@ import shutil
 import spc_8rules
 # from tqdm import tqdm
 from logger import create_logger, get_err_dtl
+# ===================================================================================
+#  平均值從machine_mean取得
+# ===================================================================================
 
+
+
+# 【建立log檔】
 workfilename = os.path.splitext(os.path.basename(__file__))[0]
 logname = workfilename + '_' + \
     datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.log'
@@ -20,6 +26,7 @@ logger.info(logname)
 t_start = time.time()
 tablename = 'machine_para'
 
+# 【從設定檔讀取路徑】
 with open('.\info.txt', 'r', encoding='utf8') as f:
 	dic_info = json.load(f)
 from_folder = dic_info['ori_json_folder']
@@ -47,23 +54,7 @@ dic_errdtl = {1: '1個點落在A區(3 sigma)外',
               7: '連續15點落在中心線二側的Zone C(1 sigma)內',
               8: '連續14點相鄰交替上下', }
 
-
-def get_machine_id(cursor, dic):
-    dic = dic['machine_info']
-
-    sql = f"""select machine_id from machine_info where
-	device_no = '{dic['device_no']}'
-	and station_no = '{dic['station_no']}'
-	and robot_no = '{dic['robot_no']}'"""
-
-    cursor.execute(sql)
-    res = cursor.fetchone()
-    if res == None:
-        return res
-    else:
-        return res[0]
-
-
+# 【組成 SQL Insret 語法】
 def get_sql(dics, tablename, tp_datas, machine_id=None):
     global json_lst_time
     lst_col, lst_val = [], []
@@ -98,6 +89,7 @@ def insert_table(cusor, filename, tablename):
         logger.info('Start execution')
         cusor.executemany(sql, tp_datas)
 
+# 【從DB取出最新幾筆資料】
 def getdata(cursor, from_time):
     global tablename
     sql = "select * from " + tablename +" where report_time >= '" + \
@@ -108,7 +100,7 @@ def getdata(cursor, from_time):
     df = pd.DataFrame(res, columns=colnames)
     return df
 
-
+# 【update，寫入分析結果】
 def update_sql(cursor, colname, id, value):
     if len(id) == 0:
         return
@@ -137,22 +129,32 @@ def update_sql(cursor, colname, id, value):
     }
     cursor.execute(sql, data)
 
-
+# =======================================================================================
+#  取得違反各個rule的點dic{rule1：[list(id), list(value)], rule2：[list(id), list(value)]} 
+#  轉換成dict{id：違反的各項rules} 如{1：(1,2,3)}
+# 【Input】 ：dict
+# 【Output】：dict
+# =======================================================================================
 def get_dicerr(dic_ofc):
     dic_err = {}
     for r in range(1, len(dic_ofc)+1):
         ofc_type = str(r)
         ofc = dic_ofc[r]
         ofc_id = ofc[0]
-        ofc_x = ofc[1]
+        # ofc_x = ofc[1]
         # ofc_y = ofc[-1]
         msg = "Against Rule %d:" % (r) + dic_errdtl[r] + ', count：' + str(len(ofc_id))
         logger.info(msg)
-        for num in range(len(ofc_x)):
+        for num in range(len(ofc_id)):
             key = ofc_id[num]
             dic_err[key] = dic_err.get(key, set()) | {ofc_type}
     return dic_err
 
+# ===================================================================================
+#  從machine_mean取得紀錄的x,y,z平均值
+# 【Input】 ：tablename、dict(where條件)
+# 【Output】：dataframe
+# ===================================================================================
 def get_mean(cursor, tablename, dic):
     sql = f"""select * from {tablename} where
 	device_no = '{dic['device_no']}'
@@ -168,6 +170,11 @@ def get_mean(cursor, tablename, dic):
         df = pd.DataFrame(res, columns=colnames)
         return df
 
+# ===================================================================================
+#  計算傳入資料違反哪些rule、moving range
+# 【Input】 ：x,y資料
+# 【Output】：dic_ichart、dic_mrchart{id：違反的rule string}、dic_mr {id：mr value}
+# ===================================================================================
 def get_err(ary_id, ary_x, ary_y, col, subgroup=1, dic_no=None):
     import numpy as np
     import matplotlib.pyplot as plt
@@ -263,7 +270,7 @@ try:
                 logger.info('Start commit')
                 connection.commit()
                 logger.info('finish commit')
-    # =======================================================================
+    # ======================= 8 rules analysis ================================================
             if json_lst_time is not None:
                 tz = timezone(timedelta(hours=+8))
                 from_time = (json_lst_time - timedelta(seconds=4000+get_pre_second)
@@ -295,6 +302,7 @@ try:
                 dic_err_i = {}
                 dic_err_mr = {}
                 dic_mr = {}
+                # ======================= x, y, z 都要跑 8 rules 分析 ================================================
                 for k, ary_value in dic_col.items():
                     dic_err_i[k], dic_err_mr[k], dic_mr[k] = get_err(ary_id, ary_time, ary_value, k, dic_no=dic_no)
                     # dic_err_i, dic_err_mr = get_err(ary_time, ary_x, dic_no=dic_no)

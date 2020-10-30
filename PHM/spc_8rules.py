@@ -1,8 +1,7 @@
 import numpy as np
 
-
+# 【rule 1】1個點落在A區(3 sigma)外
 def rule_1(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
-    # === rule 1 1個點落在A區(3 sigma)外 ===
     print('rule_1')
     ofc_ind = []
     for i in range(len(data)):
@@ -11,7 +10,8 @@ def rule_1(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
             ofc_ind.append(i)
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 2 連續3點中有2點落在中心線同一側的Zone B(2 sigma)以外 ===
+
+# 【rule 2】連續3點中有2點落在中心線同一側的Zone B(2 sigma)以外
 def rule_2(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -27,9 +27,8 @@ def rule_2(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index[(d > ucl_b) | (d < lcl_b)])
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 3 連續5點有4點落在中心線同一側的Zone C(1 sigma)以外===
 
-
+# 【rule 3】連續5點有4點落在中心線同一側的Zone C(1 sigma)以外
 def rule_3(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -41,9 +40,8 @@ def rule_3(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index[(d > ucl_c) | (d < lcl_c)])
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 4 連續9個以上的點落在中心線同一側(Zone C以外) ===
 
-
+# 【rule 4】連續9個以上的點落在中心線同一側(Zone C以外)
 def rule_4(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -55,9 +53,8 @@ def rule_4(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index)
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 5 連續7點遞增or遞減 ===
 
-
+# 【rule 5】連續7點遞增or遞減
 def rule_5(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -70,9 +67,8 @@ def rule_5(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index)
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 6 連續8點皆無落在Zone C(1 sigma) ===
 
-
+# 【rule 6】連續8點皆無落在Zone C(1 sigma)
 def rule_6(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -84,9 +80,8 @@ def rule_6(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index)
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 7 連續15點落在中心線二側的Zone C(1 sigma)內 ===
 
-
+# 【rule 7】連續15點落在中心線二側的Zone C(1 sigma)內
 def rule_7(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))
@@ -98,9 +93,8 @@ def rule_7(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
                 ofc_ind.extend(index)
     return (ids[ofc_ind], obs[ofc_ind], data[ofc_ind])
 
-# === rule 8 連續14點相鄰交替上下 ===
 
-
+# 【rule 8】連續14點相鄰交替上下
 def rule_8(ids, data, obs, cl, ucl, ucl_b, ucl_c, lcl, lcl_b, lcl_c, sec=0):
     ofc_ind = []
     ind = np.array(range(len(data)))

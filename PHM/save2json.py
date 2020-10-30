@@ -41,7 +41,10 @@ def floatformat(num):
 
 try:
     num = update_second
-    mean = [0, 0]
+
+    # 【生成常態分佈資料】
+    # mean 跟 cov 長度需一致，產生shape是size * len(mean)，此例是 num * 2
+    mean = [0, 0] 
     cov = [[2, 0], [0, 2]]
     x, y = np.random.multivariate_normal(mean, cov, num).T
     # print(type(x), x.mean(), y.mean())
@@ -52,6 +55,7 @@ try:
     # print(df_center['xvalue'].mean(), df_center['yvalue'].mean(), df_center['radius'].mean())
     # print(df_center['xvalue'].std(), df_center['yvalue'].std(), df_center['radius'].std())
 
+    # 【讀取範例檔，做出num筆資料】
     x_mean = 1920
     y_mean = 1373
     r_mean = 1233
@@ -74,6 +78,7 @@ try:
             # print(count, cur.strftime('%Y-%m-%d_%H:%M:%S'))
             time.sleep(1)
             lst_datas = []
+            # 取 ~now時間點 num筆的資料，若Now:9:00:10, num=10-->取9:00:01~9:00:10的資料
             for i in range(num):
                 dic_data = copy.deepcopy(dic_sample)
                 addsec = num-i-1
