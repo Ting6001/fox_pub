@@ -65,7 +65,7 @@ def get_machine_id(cursor, tablename, dic):
     else:
         return res[0]
 
-
+# 組成 insert SQL
 def get_sql(dics, tablename, tp_datas, machine_id=None):
     global json_lst_time
     lst_col, lst_val = [], []
@@ -85,7 +85,7 @@ def get_sql(dics, tablename, tp_datas, machine_id=None):
     tp_datas += (lst_val,)
     return sql_insert, tp_datas
 
-
+# Insert execution
 def insert_table(cusor, filename, tablename):
     with open(filename, 'r') as f:
         lst_datas = json.load(f)
@@ -100,6 +100,7 @@ def insert_table(cusor, filename, tablename):
         logger.info('Start execution')
         cusor.executemany(sql, tp_datas)
 
+# 取出DB裡最新幾筆資料
 def getdata(cursor, from_time):
     sql = """select * from machine_para where report_time >= '""" + \
         from_time + "' order by report_time"
@@ -109,7 +110,7 @@ def getdata(cursor, from_time):
     df = pd.DataFrame(res, columns=colnames)
     return df
 
-
+# update machine_para execution
 def update_sql(cursor, colname, id, value):
     if len(id) == 0:
         return
@@ -130,7 +131,7 @@ def update_sql(cursor, colname, id, value):
   '''
     cursor.execute(sql)
 
-
+# {id：{此點違反的所有規則1,2,...} }
 def get_dicerr(dic_ofc):
     dic_err = {}
     for r in range(1, len(dic_ofc)+1):
@@ -146,6 +147,7 @@ def get_dicerr(dic_ofc):
             dic_err[key] = dic_err.get(key, set()) | {ofc_type}
     return dic_err
 
+# return 違反i chart的dict, 違反mr chart的dict, mr
 def get_err(ary_id, ary_x, ary_y, col, subgroup=1, dic_no=None):
     import numpy as np
     import matplotlib.pyplot as plt
@@ -258,7 +260,7 @@ try:
                 lst_finish.append(f)
                 # connection.commit()
                 logger.info('finish commit')
-    # =======================================================================
+    # =============== 從DB取得Data ========================================================
             if json_lst_time is not None:
                 tz = timezone(timedelta(hours=+8))
                 from_time = (json_lst_time - timedelta(seconds=update_second+get_pre_second)
@@ -283,6 +285,7 @@ try:
                 dic_err_i = {}
                 dic_err_mr = {}
                 dic_mr = {}
+                # =============== x, y, z各分析一次 ========================================================
                 for k, ary_value in dic_col.items():
                     dic_err_i[k], dic_err_mr[k], dic_mr[k] = get_err(ary_id, ary_time, ary_value, k, dic_no=dic_no)
 

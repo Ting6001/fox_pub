@@ -1,0 +1,13 @@
+{
+"host" : "", 
+"port" : "", 
+"user" : "",
+"password" : "",
+"database" : "",
+"ori_json_folder":"",
+"saved_json_folder":"",
+"log_folder":"",
+"get_pre_second" : 15,
+"update_second" : 10,
+"count_limit" : 1
+}
